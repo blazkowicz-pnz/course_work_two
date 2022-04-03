@@ -468,6 +468,17 @@ textarea {
 	outline: none
 }
 
+.search_link {
+	font-family: "Arial", "monospace";
+	font-weight: bolder;
+	color: black;
+
+
+}
+
+.search_block {
+
+}
 .search__results {
 	padding-top: 20px;
 	text-align: center;

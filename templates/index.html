@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>INTAGRAMM</title>
-  <link href="static/styles.min.css" rel="stylesheet">
+  <link href="/static/styles.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -24,17 +24,21 @@
   </header>
   <main class="container">
     <section class="items">
+      <div class="search_block">
+        <a href="/search" class="search_link">ПОИСК</a>
+      <div>
+      <hr>
       {% for d in data %}
       <div class="items__item item">
         <div class="item__top">
-          <a href="/user-feed.html" class="item__head">
+          <a href="/users/{{ d.poster_name }}" class="item__head">
             <div class="item__ava-wrap">
               <img src={{ d.poster_avatar }} alt="" class="item__ava" width="47">
             </div>
             <span class="item__username">{{ d.poster_name }}</span>
           </a>
         </div>
-        <a href="/post.html" class="item__post-link">
+        <a href="/post/{{ d.pk }}" class="item__post-link">
           <img src={{ d.pic }} alt="" width="348" class="item__post-img">
         </a>
         <p class="item__descr">{{ d.content[:50] }}...</p>
