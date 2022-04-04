@@ -46,6 +46,6 @@ def get_posts_by_word(word):
             posts_list.append(post)
     return posts_list
 
-print(get_posts_by_word("еда"))
+
 
 
