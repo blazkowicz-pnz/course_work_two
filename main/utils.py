@@ -7,9 +7,15 @@ COMMENTS_PATH = config.COMMENTS
 
 
 def load_data_from_json(PATH):
-    with open(PATH, "r", encoding="utf-8") as file:
-        posts = json.load(file)
-        return posts
+    try:
+        with open(PATH, "r", encoding="utf-8") as file:
+            posts = json.load(file)
+            return posts
+    except FileNotFoundError:
+        return "File not found"
+    except json.JSONDecodeError:
+        return "Json file dont decode"
+
 
 
 def search_post_by_id(id):
@@ -44,7 +50,7 @@ def get_posts_by_word(word):
     for post in posts:
         if str(word).lower() in post["content"].lower():
             posts_list.append(post)
-    return posts_list
+    return posts_list[:10]
 
 
 
