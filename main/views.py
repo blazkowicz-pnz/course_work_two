@@ -21,18 +21,24 @@ def post_contetn(id):
     return render_template("post.html", post=post, comments=comments)
 
 
-
+#вывод всех постов пользователя "username"
 @posts_blueprint.route("/users/<username>")
 def user_posts(username):
     user_posts = get_post_by_user_name(username)
     return render_template("user-feed.html", user_posts=user_posts)
 
 
+#поиск по слову
 @posts_blueprint.route("/search/")
 def search_posts():
     word = request.args.get("word")
     posts = get_posts_by_word(word)
     return render_template("search.html", word=word, posts=posts)
+
+
+@posts_blueprint.route("/bookmarks/")
+def bookmarks_page():
+    return render_template("bookmarks.html")
 
 
 #открываем доступ к "img"

@@ -14,8 +14,6 @@ def get_json_data():
         return "Файл не найден!"
 
 
-
-
 @api_blueprint.route("/api/posts/<int:id>")
 def get_post_as_json(id):
     if id <= len(load_data_from_json(POSTS)):
