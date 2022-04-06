@@ -66,6 +66,18 @@ def get_posts_by_word(word):
         return "posts by word is not found"
 
 
+def get_posts_by_tag(tag, flag="#"):
+    posts_list_tag = []
+    posts = load_data_from_json(PATH)
+    for post in posts:
+        content_list = post["content"].split(" ")
+        for word in content_list:
+            if word and word[0] == flag:
+                if word[1:] == tag:
+                    posts_list_tag.append(post)
+
+    return posts_list_tag
+
 
 
 

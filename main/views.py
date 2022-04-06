@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, send_from_directory, request
-from main.utils import load_data_from_json, search_post_by_id, get_comment_by_post_id, get_post_by_user_name, get_posts_by_word
+from main.utils import load_data_from_json, search_post_by_id, get_comment_by_post_id, get_post_by_user_name, get_posts_by_word, get_posts_by_tag
 import config
 
 
@@ -21,7 +21,7 @@ def post_contetn(id):
     new_p = ""
     for p in post["content"].split(" "):
         if p[0] == "#":
-            new_p = p.replace(p, f"<a href='/tag/{p[1:]}/'>{p}</a>")
+            new_p = p.replace(p, f"<a href='/tag/{p[1:]}'>{p}</a>")
         else:
             new_p = p
         new_post.append(new_p)
@@ -50,9 +50,16 @@ def bookmarks_page():
     return render_template("bookmarks.html")
 
 
+
 @posts_blueprint.route("/tag/<tag_name>")
-def link_in_tag(tag_name):
-    return
+def tag_page(tag_name):
+    posts = get_posts_by_tag(tag_name)
+    full_tag = f"#{tag_name}"
+
+    return render_template("tag.html", posts=posts, tag_name=tag_name, full_tag=full_tag)
+
+
+
 
 
 #открываем доступ к "img"
