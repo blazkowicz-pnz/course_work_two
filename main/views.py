@@ -17,6 +17,15 @@ def index_page():
 @posts_blueprint.route("/post/<int:id>")
 def post_contetn(id):
     post = search_post_by_id(id)
+    new_post = []
+    new_p = ""
+    for p in post["content"].split(" "):
+        if p[0] == "#":
+            new_p = p.replace(p, f"<a href='/tag/{p[1:]}/'>{p}</a>")
+        else:
+            new_p = p
+        new_post.append(new_p)
+    post["content"] = " ".join(new_post)
     comments = get_comment_by_post_id(id)
     return render_template("post.html", post=post, comments=comments)
 
@@ -39,6 +48,11 @@ def search_posts():
 @posts_blueprint.route("/bookmarks/")
 def bookmarks_page():
     return render_template("bookmarks.html")
+
+
+@posts_blueprint.route("/tag/<tag_name>")
+def link_in_tag(tag_name):
+    return
 
 
 #открываем доступ к "img"
