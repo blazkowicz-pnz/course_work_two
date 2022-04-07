@@ -38,7 +38,7 @@
         <a href="/post/{{ user_post.pk }}" class="item__post-link">
           <img src={{ user_post.pic }} alt="" width="348" class="item__post-img">
         </a>
-        <p class="item__descr"><a href="#" class="item__tag">#food</a> {{ user_post.content[:50] }}...</p>
+        <p class="item__descr"> {{ user_post.content[:50] }}...</p>
         <div class="item__post-info">
           <div class="item__counter">
             <img src="/img/eye.png" alt="" class="item__counter-icon" width="26">
@@ -48,7 +48,7 @@
         <div class="item__post-bottom">
           <a href="/post/{{ user_post.pk }}" class="item__btn-more">Подробнее</a>
           <button type="button" class="item__bookmark-btn">
-            <a href="#">
+            <a href="/bookmarks/add/{{ user_post.pk }}">
               <img src="/img/bookmark.png" alt="" class="item__bookmark-icon" width="24">
             </a>
           </button>

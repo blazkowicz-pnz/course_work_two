@@ -1,5 +1,5 @@
-from flask import Blueprint, render_template, send_from_directory, request
-from main.utils import load_data_from_json, search_post_by_id, get_comment_by_post_id, get_post_by_user_name, get_posts_by_word, get_posts_by_tag
+from flask import Blueprint, render_template, send_from_directory, request, redirect
+from main.utils import load_data_from_json, search_post_by_id, get_comment_by_post_id, get_post_by_user_name, get_posts_by_word, get_posts_by_tag, add_to_bookmarks, remove_post
 import config
 
 
@@ -10,7 +10,9 @@ posts_blueprint = Blueprint("posts_blueprint", __name__, static_folder="static",
 @posts_blueprint.route("/")
 def index_page():
     data = load_data_from_json(config.POSTS)
-    return render_template("index.html", data=data)
+    bookmarks_posts = load_data_from_json(config.BOOKMARKS)
+    count_bookmarks_posts = len(bookmarks_posts)
+    return render_template("index.html", data=data, count_bookmarks_posts=count_bookmarks_posts)
 
 
 #Вывод поста по ID
@@ -47,7 +49,9 @@ def search_posts():
 
 @posts_blueprint.route("/bookmarks/")
 def bookmarks_page():
-    return render_template("bookmarks.html")
+    bookmarks_posts = load_data_from_json(config.BOOKMARKS)
+    count_bookmarks_posts = len(bookmarks_posts)
+    return render_template("bookmarks.html", bookmarks_posts=bookmarks_posts , count_bookmarks_posts=count_bookmarks_posts)
 
 
 
@@ -59,7 +63,26 @@ def tag_page(tag_name):
     return render_template("tag.html", posts=posts, tag_name=tag_name, full_tag=full_tag)
 
 
+@posts_blueprint.route("/bookmarks/add/<int:id>")
+def post_add_to_bookmarks(id):
+    post = search_post_by_id(id)
+    all_bookmarks = load_data_from_json(config.BOOKMARKS)
+    for b in all_bookmarks:
+        if b == post:
+            return "Такой пост уже добавлен!"
+            break
+    add_to_bookmarks(post)
+    return redirect("/")
 
+
+@posts_blueprint.route("/bookmarks/remove/<int:id>")
+def del_bookmarks(id):
+    bookmarks_posts = load_data_from_json(config.BOOKMARKS)
+    for post in bookmarks_posts:
+        if id == post["pk"]:
+            remove_post(post)
+
+    return redirect("/")
 
 
 #открываем доступ к "img"

@@ -4,6 +4,7 @@ import config
 
 PATH = config.POSTS
 COMMENTS_PATH = config.COMMENTS
+BOOKMARKS_PATH = config.BOOKMARKS
 
 
 def load_data_from_json(PATH):
@@ -67,17 +68,43 @@ def get_posts_by_word(word):
 
 
 def get_posts_by_tag(tag, flag="#"):
-    posts_list_tag = []
-    posts = load_data_from_json(PATH)
-    for post in posts:
-        content_list = post["content"].split(" ")
-        for word in content_list:
-            if word and word[0] == flag:
-                if word[1:] == tag:
-                    posts_list_tag.append(post)
+    try:
+        posts_list_tag = []
+        posts = load_data_from_json(PATH)
+        for post in posts:
+            content_list = post["content"].split(" ")
+            for word in content_list:
+                if word and word[0] == flag:
+                    if word[1:] == tag:
+                        posts_list_tag.append(post)
+        return posts_list_tag
+    except:
+        return "posts with words'#' not found"
 
-    return posts_list_tag
+def add_to_bookmarks(content):
+    try:
+        with open(BOOKMARKS_PATH, "r", encoding="utf-8") as file:
+            data = json.load(file)
+            data.append(content)
+            with open(BOOKMARKS_PATH, "w", encoding="utf-8") as file:
+                data = json.dump(data, file, ensure_ascii=False)
+        return (data)
+    except FileNotFoundError:
+        return "file not found"
+    except json.JSONDecodeError:
+        return "JSON file don't decode"
 
+
+def remove_post(post):
+    try:
+        with open(BOOKMARKS_PATH, "r", encoding='utf-8') as file:
+            data = json.load(file)
+            data.remove(post)
+            with open(BOOKMARKS_PATH, "w", encoding="utf-8") as file:
+                data = json.dump(data, file, ensure_ascii=False)
+        return data
+    except FileNotFoundError:
+        return "file not found"
 
 
 
