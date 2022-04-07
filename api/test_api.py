@@ -7,6 +7,7 @@ def test_api():
     response = app.test_client().get("/api/posts")
     assert response.status_code == 200
 
+
 def test_type_posts():
     data = load_data_from_json(POSTS)
     assert type(data) == list, TypeError

@@ -7,6 +7,7 @@ COMMENTS_PATH = config.COMMENTS
 BOOKMARKS_PATH = config.BOOKMARKS
 
 
+# загрузка данных из json
 def load_data_from_json(PATH):
     try:
         with open(PATH, "r", encoding="utf-8") as file:
@@ -18,7 +19,7 @@ def load_data_from_json(PATH):
         return "Json file don't decode"
 
 
-
+# получаем пост по его ID
 def search_post_by_id(id):
     try:
         posts = load_data_from_json(PATH)
@@ -29,7 +30,7 @@ def search_post_by_id(id):
         return "Post not found"
 
 
-
+# Получаем комментарии, соответствующие нужному пользователю
 def get_comment_by_post_id(post_id):
     try:
         comment_list = []
@@ -43,6 +44,7 @@ def get_comment_by_post_id(post_id):
         return "Comments not found"
 
 
+# поиск постов по имени пользователя, вернет список постов одного пользователя
 def get_post_by_user_name(user_name):
     try:
         posts = load_data_from_json(PATH)
@@ -55,6 +57,7 @@ def get_post_by_user_name(user_name):
         return "Users posts is not found"
 
 
+# поиск постов по слову, вернет список из 10 постов
 def get_posts_by_word(word):
     try:
         posts_list = []
@@ -67,6 +70,7 @@ def get_posts_by_word(word):
         return "posts by word is not found"
 
 
+# Поиск постов, содержащих тэги, запись в список
 def get_posts_by_tag(tag, flag="#"):
     try:
         posts_list_tag = []
@@ -74,13 +78,15 @@ def get_posts_by_tag(tag, flag="#"):
         for post in posts:
             content_list = post["content"].split(" ")
             for word in content_list:
-                if word and word[0] == flag:
+                if word[0] == flag:
                     if word[1:] == tag:
                         posts_list_tag.append(post)
         return posts_list_tag
     except:
         return "posts with words'#' not found"
 
+
+# Добавление поста в закладки - файл bookmarks.json. Убедитесь, что bookmarks.json не пустой и содержит список. При необходимости создайте его (список)
 def add_to_bookmarks(content):
     try:
         with open(BOOKMARKS_PATH, "r", encoding="utf-8") as file:
@@ -95,6 +101,7 @@ def add_to_bookmarks(content):
         return "JSON file don't decode"
 
 
+# удаление поста, в качестве аргумента передаем пост, который необходимо удалить!
 def remove_post(post):
     try:
         with open(BOOKMARKS_PATH, "r", encoding='utf-8') as file:

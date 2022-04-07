@@ -1,5 +1,5 @@
 import pytest
-from main.utils import load_data_from_json, search_post_by_id, get_comment_by_post_id, get_post_by_user_name, get_posts_by_word
+from main.utils import load_data_from_json, search_post_by_id, get_comment_by_post_id, get_post_by_user_name, get_posts_by_word, get_posts_by_tag
 from config import POSTS
 
 
@@ -32,4 +32,6 @@ def test_get_posts_by_user_name():
 def test_get_post_by_word():
     posts_list = get_posts_by_word(str)
     assert type(posts_list) == list, TypeError
+
+
 
