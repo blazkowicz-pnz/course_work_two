@@ -94,7 +94,7 @@ def add_to_bookmarks(content):
             data.append(content)
             with open(BOOKMARKS_PATH, "w", encoding="utf-8") as file:
                 data = json.dump(data, file, ensure_ascii=False)
-        return (data)
+        return data
     except FileNotFoundError:
         return "file not found"
     except json.JSONDecodeError:
