@@ -7,8 +7,8 @@ COMMENTS_PATH = config.COMMENTS
 BOOKMARKS_PATH = config.BOOKMARKS
 
 
-# загрузка данных из json
 def load_data_from_json(PATH):
+    """ загрузка данных из json """
     try:
         with open(PATH, "r", encoding="utf-8") as file:
             posts = json.load(file)
@@ -19,8 +19,8 @@ def load_data_from_json(PATH):
         return "Json file don't decode"
 
 
-# получаем пост по его ID
 def search_post_by_id(id):
+    """ получаем пост по его ID """
     try:
         posts = load_data_from_json(PATH)
         for post in posts:
@@ -30,8 +30,11 @@ def search_post_by_id(id):
         return "Post not found"
 
 
-# Получаем комментарии, соответствующие нужному пользователю
 def get_comment_by_post_id(post_id):
+    """
+    Получаем комментарии,
+    соответствующие нужному пользователю
+    """
     try:
         comment_list = []
         post = search_post_by_id(post_id)
@@ -44,8 +47,11 @@ def get_comment_by_post_id(post_id):
         return "Comments not found"
 
 
-# поиск постов по имени пользователя, вернет список постов одного пользователя
 def get_post_by_user_name(user_name):
+    """
+    поиск постов по имени пользователя,
+    вернет список постов одного пользователя
+    """
     try:
         posts = load_data_from_json(PATH)
         users_post_list = []
@@ -57,8 +63,11 @@ def get_post_by_user_name(user_name):
         return "Users posts is not found"
 
 
-# поиск постов по слову, вернет список из 10 постов
 def get_posts_by_word(word):
+    """
+    поиск постов по слову,
+    вернет список из 10 постов
+    """
     try:
         posts_list = []
         posts = load_data_from_json(PATH)
@@ -66,12 +75,15 @@ def get_posts_by_word(word):
             if str(word).lower() in post["content"].lower():
                 posts_list.append(post)
         return posts_list[:10]
-    except:
+    except ValueError:
         return "posts by word is not found"
 
 
-# Поиск постов, содержащих тэги, запись в список
 def get_posts_by_tag(tag, flag="#"):
+    """
+    Поиск постов, содержащих тэги,
+    запись в список
+    """
     try:
         posts_list_tag = []
         posts = load_data_from_json(PATH)
@@ -82,27 +94,34 @@ def get_posts_by_tag(tag, flag="#"):
                     if word[1:] == tag:
                         posts_list_tag.append(post)
         return posts_list_tag
-    except:
+    except ValueError:
         return "posts with words'#' not found"
 
 
-# Добавление поста в закладки - файл bookmarks.json. Убедитесь, что bookmarks.json не пустой и содержит список. При необходимости создайте его (список)
 def add_to_bookmarks(content):
+    """
+    Добавление поста в закладки - файл bookmarks.json.
+    Убедитесь, что bookmarks.json не пустой и содержит список.
+    При необходимости создайте его (список)
+    """
     try:
         with open(BOOKMARKS_PATH, "r", encoding="utf-8") as file:
             data = json.load(file)
             data.append(content)
             with open(BOOKMARKS_PATH, "w", encoding="utf-8") as file:
                 data = json.dump(data, file, ensure_ascii=False)
-        return (data)
+        return data
     except FileNotFoundError:
         return "file not found"
     except json.JSONDecodeError:
         return "JSON file don't decode"
 
 
-# удаление поста, в качестве аргумента передаем пост, который необходимо удалить!
 def remove_post(post):
+    """
+    удаление поста, в качестве аргумента передаем пост,
+    который необходимо удалить!
+    """
     try:
         with open(BOOKMARKS_PATH, "r", encoding='utf-8') as file:
             data = json.load(file)

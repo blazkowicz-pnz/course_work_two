@@ -6,21 +6,20 @@ import config
 posts_blueprint = Blueprint("posts_blueprint", __name__, static_folder="static", template_folder="templates")
 
 
-#Вывод всех постов
 @posts_blueprint.route("/")
 def index_page():
+    """ Вывод всех постов """
     data = load_data_from_json(config.POSTS)
     bookmarks_posts = load_data_from_json(config.BOOKMARKS)
     count_bookmarks_posts = len(bookmarks_posts)
     return render_template("index.html", data=data, count_bookmarks_posts=count_bookmarks_posts)
 
 
-#Вывод поста по ID
 @posts_blueprint.route("/post/<int:id>")
 def post_contetn(id):
+    """ Вывод поста по ID """
     post = search_post_by_id(id)
     new_post = []
-    new_p = ""
     for p in post["content"].split(" "):
         if p[0] == "#":
             new_p = p.replace(p, f"<a href='/tag/{p[1:]}'>{p}</a>")
@@ -32,16 +31,16 @@ def post_contetn(id):
     return render_template("post.html", post=post, comments=comments)
 
 
-#вывод всех постов пользователя "username"
 @posts_blueprint.route("/users/<username>")
 def user_posts(username):
+    """ вывод всех постов пользователя 'username' """
     user_posts = get_post_by_user_name(username)
     return render_template("user-feed.html", user_posts=user_posts)
 
 
-#поиск по слову
 @posts_blueprint.route("/search/")
 def search_posts():
+    """ поиск по слову """
     word = request.args.get("word")
     posts = get_posts_by_word(word)
     return render_template("search.html", word=word, posts=posts)
@@ -49,14 +48,15 @@ def search_posts():
 
 @posts_blueprint.route("/bookmarks/")
 def bookmarks_page():
+    """ вывод всех закладок """
     bookmarks_posts = load_data_from_json(config.BOOKMARKS)
     count_bookmarks_posts = len(bookmarks_posts)
     return render_template("bookmarks.html", bookmarks_posts=bookmarks_posts , count_bookmarks_posts=count_bookmarks_posts)
 
 
-
 @posts_blueprint.route("/tag/<tag_name>")
 def tag_page(tag_name):
+    """ вывод постов по тэгу """
     posts = get_posts_by_tag(tag_name)
     full_tag = f"#{tag_name}"
 
@@ -65,18 +65,19 @@ def tag_page(tag_name):
 
 @posts_blueprint.route("/bookmarks/add/<int:id>")
 def post_add_to_bookmarks(id):
+    """ добавление поста в закладки, с проверкой на наличие """
     post = search_post_by_id(id)
     all_bookmarks = load_data_from_json(config.BOOKMARKS)
     for b in all_bookmarks:
         if b == post:
             return "Такой пост уже добавлен!"
-            break
     add_to_bookmarks(post)
     return redirect("/")
 
 
 @posts_blueprint.route("/bookmarks/remove/<int:id>")
 def del_bookmarks(id):
+    """ удаление поста из закладок """
     bookmarks_posts = load_data_from_json(config.BOOKMARKS)
     for post in bookmarks_posts:
         if id == post["pk"]:
@@ -85,7 +86,7 @@ def del_bookmarks(id):
     return redirect("/")
 
 
-#открываем доступ к "img"
 @posts_blueprint.route("/img/<path:path>")
 def static_dir(path):
+    """ открываем доступ к папке IMG """
     return send_from_directory("img", path)
